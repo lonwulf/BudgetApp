@@ -2,7 +2,6 @@ package com.lonwulf.budgetapp.objectbox.entity
 
 import com.lonwulf.budgetapp.domain.model.Transactions
 import com.lonwulf.budgetapp.objectbox.BoxStoreObject
-import com.lonwulf.budgetapp.objectbox.util.ExpenseDateConverter
 import com.lonwulf.budgetapp.objectbox.util.TransactionsConverter
 import io.objectbox.annotation.ConflictStrategy
 import io.objectbox.annotation.Convert
@@ -25,5 +24,5 @@ data class ExpenseOB(
     @Convert(converter = TransactionsConverter::class, dbType = String::class)
     var recentTransactions: List<Transactions>? = emptyList(),
 
-    var date:String = String()
+    var date: String = String()
 ) : BoxStoreObject

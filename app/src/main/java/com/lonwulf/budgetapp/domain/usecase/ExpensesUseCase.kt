@@ -15,6 +15,18 @@ class ExpensesUseCase @Inject constructor(private val repository: Repository) {
             emit(GenericUseCaseResult(result = list, isSuccessful = true))
         }
 
+    fun insertAllItems(): Flow<GenericUseCaseResult<Boolean>> = flow {
+        try {
+            val list = listOf(Expenses(), Expenses(), Expenses(), Expenses(), Expenses())
+            repository.insertAll(list)
+            emit(GenericUseCaseResult(result = true, isSuccessful = true))
+        } catch (ex: Exception) {
+            emit(GenericUseCaseResult(result = false, isSuccessful = false))
+        }
+    }
+
+    suspend fun deleteCache() = repository.deleteAllExpenses()
+
     fun fetchExpenseByMonthDate(date: Date): Flow<GenericUseCaseResult<List<Expenses>>> =
         flow {
             val list = repository.fetchExpensesRecordsByMonthDate(date)
