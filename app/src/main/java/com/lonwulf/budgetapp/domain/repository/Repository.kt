@@ -8,5 +8,5 @@ interface Repository {
     suspend fun insert(model:Expenses)
     suspend fun deleteAllExpenses()
     suspend fun fetchAllExpensesRecords():List<Expenses>
-    suspend fun fetchExpensesRecordsByMonthDate(date: Date):List<Expenses>
+    suspend fun fetchExpensesRecordsByMonthDate(date: String):Expenses?
 }

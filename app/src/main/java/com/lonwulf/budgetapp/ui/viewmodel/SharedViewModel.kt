@@ -18,8 +18,11 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(internal val expensesUseCase: ExpensesUseCase):ViewModel() {
 
     private var _expensesStateFlow = MutableStateFlow<GenericResultState<List<Expenses>>>(GenericResultState.Loading)
+    private var _monthlyExpensesStateFlow = MutableStateFlow<GenericResultState<Expenses>>(GenericResultState.Loading)
     val expensesStateFlow
         get() = _expensesStateFlow.asStateFlow()
+    val monthlyExpensesReport
+        get() = _monthlyExpensesStateFlow.asStateFlow()
 
     fun fetchAllExpenses() = viewModelScope.launch(Dispatchers.IO) {
         expensesUseCase().onStart { setExpensesResult(GenericResultState.Loading) }
@@ -34,7 +37,25 @@ class SharedViewModel @Inject constructor(internal val expensesUseCase: Expenses
 
     }
 
+
+    fun fetchMonthlyExpenses(date:String) = viewModelScope.launch(Dispatchers.IO) {
+        expensesUseCase.fetchExpenseByMonthDate(date).onStart { setExpensesResult(GenericResultState.Loading) }
+            .flowOn(Dispatchers.IO)
+            .collect{
+                if (it.isSuccessful){
+                    setMonthlyExpensesResult(GenericResultState.Success(it.result))
+                }else{
+                    setMonthlyExpensesResult(GenericResultState.Empty)
+                }
+            }
+
+    }
+
+
     private fun setExpensesResult(data:GenericResultState<List<Expenses>>){
         _expensesStateFlow.value = data
+    }
+    private fun setMonthlyExpensesResult(data:GenericResultState<Expenses>){
+        _monthlyExpensesStateFlow.value = data
     }
 }

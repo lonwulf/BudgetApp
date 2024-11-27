@@ -1,7 +1,9 @@
 package com.lonwulf.budgetapp.objectbox.entity
 
+import com.lonwulf.budgetapp.domain.model.Expenses
 import com.lonwulf.budgetapp.domain.model.Transactions
 import com.lonwulf.budgetapp.objectbox.BoxStoreObject
+import com.lonwulf.budgetapp.objectbox.util.CategoryConverter
 import com.lonwulf.budgetapp.objectbox.util.TransactionsConverter
 import io.objectbox.annotation.ConflictStrategy
 import io.objectbox.annotation.Convert
@@ -19,7 +21,8 @@ data class ExpenseOB(
 
     var expense: Double = 0.0,
 
-    var spendingCategory: String = String(),
+    @Convert(converter = CategoryConverter::class, dbType = String::class)
+    var spendingCategory: List<Expenses.ExpenseCategory> = emptyList(),
 
     @Convert(converter = TransactionsConverter::class, dbType = String::class)
     var recentTransactions: List<Transactions>? = emptyList(),

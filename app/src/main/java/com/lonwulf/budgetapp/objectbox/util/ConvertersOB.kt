@@ -2,6 +2,7 @@ package com.lonwulf.budgetapp.objectbox.util
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.lonwulf.budgetapp.domain.model.Expenses
 import com.lonwulf.budgetapp.domain.model.Transactions
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonAdapter
@@ -16,7 +17,7 @@ import java.lang.reflect.ParameterizedType
 
 class TransactionsConverter : PropertyConverter<List<Transactions>?, String?> {
     private val moshi =
-        Moshi.Builder().add(KotlinJsonAdapterFactory()).add(ColorJsonAdapter()).build()
+        Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
     private val type: ParameterizedType =
         Types.newParameterizedType(List::class.java, Transactions::class.java)
     private val adapter: JsonAdapter<List<Transactions>> by lazy {
@@ -28,6 +29,24 @@ class TransactionsConverter : PropertyConverter<List<Transactions>?, String?> {
     }
 
     override fun convertToDatabaseValue(entityProperty: List<Transactions>?): String? {
+        return adapter.toJson(entityProperty)
+    }
+}
+
+class CategoryConverter : PropertyConverter<List<Expenses.ExpenseCategory>?, String?> {
+    private val moshi =
+        Moshi.Builder().add(KotlinJsonAdapterFactory()).add(ColorJsonAdapter()).build()
+    private val type: ParameterizedType =
+        Types.newParameterizedType(List::class.java, Expenses.ExpenseCategory::class.java)
+    private val adapter: JsonAdapter<List<Expenses.ExpenseCategory>> by lazy {
+        moshi.adapter(type)
+    }
+
+    override fun convertToEntityProperty(databaseValue: String?): List<Expenses.ExpenseCategory>? {
+        return adapter.fromJson(databaseValue)
+    }
+
+    override fun convertToDatabaseValue(entityProperty: List<Expenses.ExpenseCategory>?): String? {
         return adapter.toJson(entityProperty)
     }
 }

@@ -47,7 +47,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.lonwulf.budgetapp.R
-import com.lonwulf.budgetapp.domain.model.Transactions
+import com.lonwulf.budgetapp.domain.model.Expenses
 import com.lonwulf.budgetapp.navigation.NavComposable
 import com.lonwulf.budgetapp.ui.theme.darkGreen
 import com.lonwulf.budgetapp.ui.theme.lightGreen
@@ -57,6 +57,8 @@ import com.lonwulf.budgetapp.ui.theme.textGray
 import com.lonwulf.budgetapp.ui.theme.whiteBg
 import com.lonwulf.budgetapp.ui.viewmodel.SharedViewModel
 import com.lonwulf.budgetapp.util.GenericResultState
+import java.time.LocalDate
+import java.time.Month
 
 
 class HomepageScreenComposable : NavComposable {
@@ -70,24 +72,29 @@ class HomepageScreenComposable : NavComposable {
 
 }
 
+fun getCurrentMonth(): Month {
+    val currentDate = LocalDate.now()
+    return currentDate.month
+}
+
 @Composable
 fun HomepageScreen(
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
     vm: SharedViewModel = hiltViewModel()
 ) {
-    val resultState by vm.expensesStateFlow.collectAsState()
+    val resultState by vm.monthlyExpensesReport.collectAsState()
     var expenses by remember {
-        mutableStateOf(listOf(Transactions()))
+        mutableStateOf(Expenses())
     }
-    LaunchedEffect(resultState) {
+    LaunchedEffect(key1 = Unit, key2 = resultState) {
+        vm.fetchMonthlyExpenses(getCurrentMonth().toString())
         when (resultState) {
             is GenericResultState.Loading -> {}
             is GenericResultState.Empty -> {}
             is GenericResultState.Success -> {
                 expenses =
-                    (resultState as GenericResultState.Success<List<Transactions>>).result
-                        ?: emptyList()
+                    (resultState as GenericResultState.Success<Expenses>).result!!
             }
         }
     }
@@ -140,7 +147,7 @@ fun HomepageScreen(
                     width = Dimension.fillToConstraints
                 })
         Text(
-            text = "Amount here",
+            text = expenses.expense.toString(),
             style = MaterialTheme.typography.headlineLarge,
             color = whiteBg,
             modifier = modifier.constrainAs(amount) {
@@ -170,9 +177,9 @@ fun HomepageScreen(
         )
 
         SpendingSummary(
-            totalSpend = "",
-            spendMonth = "",
-            categories = emptyList(),
+            totalSpend = expenses.expense.toString(),
+            spendMonth = expenses.date,
+            categories = expenses.spendingCategory,
             modifier = modifier.constrainAs(summary) {
                 top.linkTo(boxBg.bottom, 20.dp)
                 start.linkTo(parent.start)
@@ -188,7 +195,7 @@ fun HomepageScreen(
                 start.linkTo(parent.start, 15.dp)
             }
         )
-        expenses.forEach { expense ->
+        expenses.recentTransactions?.forEach { transaction ->
             ElevatedCard(
                 modifier = modifier
                     .fillMaxWidth()
@@ -212,7 +219,7 @@ fun HomepageScreen(
                 ) {
                     val (img, expenseName, date, amount, category) = createRefs()
                     Image(
-                        painter = painterResource(expense.imageRes),
+                        painter = painterResource(transaction.imageRes),
                         contentDescription = "null",
                         modifier = modifier
                             .size(30.dp)
@@ -221,7 +228,7 @@ fun HomepageScreen(
                                 top.linkTo(parent.top, 15.dp)
                             })
                     Text(
-                        text = expense.name,
+                        text = transaction.name,
                         style = MaterialTheme.typography.bodyMedium,
                         color = textBlack,
                         modifier = modifier.constrainAs(expenseName) {
@@ -230,7 +237,7 @@ fun HomepageScreen(
                         }
                     )
                     Text(
-                        text = expense.date.toString(),
+                        text = transaction.date.toString(),
                         style = MaterialTheme.typography.bodySmall,
                         color = textGray,
                         modifier = modifier.constrainAs(date) {
@@ -239,7 +246,7 @@ fun HomepageScreen(
                         }
                     )
                     Text(
-                        text = expense.amount.toString(),
+                        text = transaction.amount.toString(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = red,
                         modifier = modifier.constrainAs(amount) {
@@ -269,7 +276,7 @@ fun SpendingSummary(
     modifier: Modifier,
     totalSpend: String,
     spendMonth: String,
-    categories: List<Transactions>
+    categories: List<Expenses.ExpenseCategory>
 ) {
     Column(
         modifier = modifier
@@ -334,7 +341,7 @@ fun CustomDropdownMenu(months: List<String>, selectedMonth: String) {
 }
 
 @Composable
-fun CategorySpendItem(category: Transactions) {
+fun CategorySpendItem(category: Expenses.ExpenseCategory) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -346,11 +353,11 @@ fun CategorySpendItem(category: Transactions) {
                 modifier = Modifier
                     .size(8.dp)
                     .clip(CircleShape)
-                    .background(category.color!!, shape = CircleShape)
+                    .background(category.color, shape = CircleShape)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = category.name,
+                text = category.categoryName,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f),
                 color = MaterialTheme.colorScheme.onSurface
@@ -363,21 +370,13 @@ fun CategorySpendItem(category: Transactions) {
         }
 
         LinearProgressIndicator(
-            progress = category.progress,
+            progress = category.progressFraction,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)
                 .clip(RoundedCornerShape(4.dp)),
-            color = category.color!!,
+            color = category.color,
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
     }
 }
-
-// Model Class
-//data class SpendCategory(
-//    val name: String,
-//    val amount: String,
-//    val progress: Float, // Progress as a fraction (e.g., 0.5f for 50%)
-//    val color: Color
-//)

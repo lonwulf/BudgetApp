@@ -34,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +53,6 @@ import com.lonwulf.budgetapp.ui.screens.NotificationScreenComposable
 import com.lonwulf.budgetapp.ui.screens.ReportScreenComposable
 import com.lonwulf.budgetapp.ui.screens.SuccessScreenComposable
 import com.lonwulf.budgetapp.ui.theme.BudgetAppTheme
-import com.lonwulf.budgetapp.ui.theme.darkGreen
 import com.lonwulf.budgetapp.ui.theme.lightGreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -190,7 +188,7 @@ class MainActivity : ComponentActivity() {
         ) {
             FloatingActionButton(
                 onClick = {
-                    navHostController.navigate("add_item_route")
+                    navHostController.navigate(TopLevelDestinations.BudgetScreen.route)
                 },
                 containerColor = lightGreen,
                 modifier = Modifier.size(64.dp)

@@ -1,6 +1,7 @@
 package com.lonwulf.budgetapp.data
 
 import com.lonwulf.budgetapp.domain.mapper.toDomainModel
+import com.lonwulf.budgetapp.domain.mapper.toExpensesDomainModel
 import com.lonwulf.budgetapp.domain.mapper.toObjectBox
 import com.lonwulf.budgetapp.domain.mapper.toObjectBoxModel
 import com.lonwulf.budgetapp.domain.model.Expenses
@@ -28,8 +29,8 @@ class RepositoryImpl @Inject constructor(private val expensesService: ExpensesSe
         return result.toDomainModel()
     }
 
-    override suspend fun fetchExpensesRecordsByMonthDate(date: Date): List<Expenses> {
-        val result = expensesService.findAll()
-        return result.toDomainModel()
+    override suspend fun fetchExpensesRecordsByMonthDate(date: String): Expenses? {
+        val result = expensesService.findExpenseByMonthDate(date)
+        return result?.toExpensesDomainModel()
     }
 }

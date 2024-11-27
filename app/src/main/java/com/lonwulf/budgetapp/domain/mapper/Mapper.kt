@@ -35,3 +35,10 @@ fun Expenses.toObjectBoxModel(): ExpenseOB = ExpenseOB(
     spendingCategory = this.spendingCategory,
     date = this.date
 )
+
+fun ExpenseOB.toExpensesDomainModel(): Expenses = Expenses(
+    expense = this.expense,
+    spendingCategory = this.spendingCategory,
+    recentTransactions = this.recentTransactions,
+    date = this.date
+)

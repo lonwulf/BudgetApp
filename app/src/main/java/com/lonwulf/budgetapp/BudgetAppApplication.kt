@@ -27,7 +27,7 @@ class BudgetAppApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        setupExpensesSyncWorker(this)
+        setupExpensesSyncWorker(applicationContext as Context)
     }
 
     private fun setupExpensesSyncWorker(context: Context) {

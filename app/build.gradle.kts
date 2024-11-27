@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.work)
 
     kapt(libs.hilt.compiler.android)
+    kapt(libs.hilt.compiler)
 
     releaseImplementation(libs.objectbox.android)
     implementation(libs.objectbox.kotlin)
