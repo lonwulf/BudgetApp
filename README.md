@@ -1,10 +1,10 @@
-Project Setup Guide
-Prerequisites
+##Project Setup Guide
+#Prerequisites
 
 Android Studio
 Git
 
-Installation Steps
+#Installation Steps
 1. Clone the Repository
 bashCopygit clone -b master
 2. Open in Android Studio
@@ -32,4 +32,3 @@ Recommended Environment
 Android Studio Meerkat or Hedgehog
 Gradle 8.0+
 Kotlin 2.0
- CopyRetryClaude does not have the ability to run the code it generates yet.Claude can make mistakes. Please double-check responses. 3.5 SonnetConciseTip:
