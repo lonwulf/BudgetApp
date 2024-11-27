@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">BudgetApp</string>
+    <string name="budget_item_added">Budget Item Added</string>
+    <string name="budget_item_desc">Budget Item has been added successfully</string>
+    <string name="category_name">Budget Item Name</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
+    <string name="back_home">Go back Home</string>
+    <string name="rate_experience">Rate your experience</string>
+    <string name="add_new">Add New Budget Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="placeholder_txt">Category name</string>
+    <string name="allocation">Allocation</string>
+    <string name="create_new_budget_item">Create New Budget Item</string>
+    <string name="welcome_txt">Welcome back Kibunja</string>
+    <string name="remaining_txt">Remaining on your monthly budget</string>
+    <string name="total_spent_txt">Total Spend this month</string>
+    <string name="recent_transactions">Recent transactions</string>
+    <string name="view_all">View all</string>
+    <string name="enter_allocated_amount">Enter allocated amount</string>
+</resources>
