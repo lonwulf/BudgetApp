@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -49,6 +50,7 @@ import androidx.navigation.NavHostController
 import com.lonwulf.budgetapp.R
 import com.lonwulf.budgetapp.domain.model.Expenses
 import com.lonwulf.budgetapp.navigation.NavComposable
+import com.lonwulf.budgetapp.ui.theme.BudgetAppTheme
 import com.lonwulf.budgetapp.ui.theme.darkGreen
 import com.lonwulf.budgetapp.ui.theme.lightGreen
 import com.lonwulf.budgetapp.ui.theme.red
@@ -79,27 +81,33 @@ fun getCurrentMonth(): Month {
 
 @Composable
 fun HomepageScreen(
-    navHostController: NavHostController,
+    navHostController: NavHostController?,
     modifier: Modifier = Modifier,
     vm: SharedViewModel = hiltViewModel()
 ) {
-    val resultState by vm.monthlyExpensesReport.collectAsState()
+    val resultState by vm.monthlyExpensesReport.collectAsState(initial = GenericResultState.Empty)
     var expenses by remember {
         mutableStateOf(Expenses())
     }
-    LaunchedEffect(key1 = Unit, key2 = resultState) {
+    LaunchedEffect(Unit) {
         vm.fetchMonthlyExpenses(getCurrentMonth().toString())
+    }
+    LaunchedEffect(key1 = resultState) {
         when (resultState) {
             is GenericResultState.Loading -> {}
             is GenericResultState.Empty -> {}
             is GenericResultState.Success -> {
-                expenses =
-                    (resultState as GenericResultState.Success<Expenses>).result!!
+                val successState = resultState as? GenericResultState.Success<Expenses>
+                successState?.result?.let {
+                    expenses = it
+                }
             }
         }
     }
 
-    ConstraintLayout(modifier = modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = modifier
+        .fillMaxSize()
+        .background(color = whiteBg)) {
         val (profileImg, welcomeTxt, notificationIcn, boxBg, amount, currency, amountTxt, summary, recentTransactionsTitle, listview) = createRefs()
         Icon(
             painter = painterResource(com.lonwulf.budgetapp.presentation.R.drawable.profile_img),
@@ -378,5 +386,13 @@ fun CategorySpendItem(category: Expenses.ExpenseCategory) {
             color = category.color,
             trackColor = MaterialTheme.colorScheme.surfaceVariant
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    BudgetAppTheme {
+        HomepageScreen(null)
     }
 }
