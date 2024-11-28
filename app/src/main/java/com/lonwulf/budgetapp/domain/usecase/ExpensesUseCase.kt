@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class ExpensesUseCase @Inject constructor(private val repository: Repository) {
-    operator fun invoke(): Flow<GenericUseCaseResult<List<Expenses>>> =
+    operator fun invoke(): Flow<GenericUseCaseResult<Expenses?>> =
         flow {
-            val list = repository.fetchAllExpensesRecords()
-            emit(GenericUseCaseResult(result = list, isSuccessful = true))
+            val expenses = repository.fetchAllExpensesRecords()
+            emit(GenericUseCaseResult(result = expenses, isSuccessful = true))
         }
 
     fun insertAllItems(): Flow<GenericUseCaseResult<Boolean>> = flow {
@@ -86,6 +86,21 @@ class ExpensesUseCase @Inject constructor(private val repository: Repository) {
     }
 
     suspend fun deleteCache() = repository.deleteAllExpenses()
+
+    fun insertExpense(expenses: Expenses): Flow<GenericUseCaseResult<Boolean>> = flow {
+        try {
+            repository.insert(expenses)
+            emit(GenericUseCaseResult(result = true, isSuccessful = true))
+        } catch (ex: Exception) {
+            emit(
+                GenericUseCaseResult(
+                    result = false,
+                    isSuccessful = false,
+                    msg = ex.localizedMessage
+                )
+            )
+        }
+    }
 
     fun fetchExpenseByMonthDate(date: String): Flow<GenericUseCaseResult<Expenses?>> =
         flow {

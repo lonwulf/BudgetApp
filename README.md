@@ -1,20 +1,20 @@
-# Project Setup Guide
+# _Project Setup Guide_
 
 ## Prerequisites
 
 - Android Studio
 - Git
 
-# Installation Steps
+## Installation Steps
 - Clone the master branch
 - Open in Android Studio
 
-# Launch Android Studio
+## Launch Android Studio
 - Select "Open an existing project"
 - Navigate to the cloned repository
 - Select the project directory
 
-# Install Debug App
+## Install Debug App
 
 - Connect an Android device or set up an emulator
 - Click "Run" (green play button) in Android Studio
@@ -27,7 +27,7 @@ Ensure you have the latest Android SDK tools
 Verify your device/emulator meets minimum API requirements
 Check internet connection for gradle dependencies
 
-# Recommended Environment
+## Recommended Environment
 
 - Android Studio Meerkat or Hedgehog
 - Gradle 8.0+

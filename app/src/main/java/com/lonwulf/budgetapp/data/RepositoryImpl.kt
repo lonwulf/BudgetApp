@@ -24,9 +24,9 @@ class RepositoryImpl @Inject constructor(private val expensesService: ExpensesSe
         expensesService.deleteAll()
     }
 
-    override suspend fun fetchAllExpensesRecords(): List<Expenses> {
-        val result = expensesService.findAll()
-        return result.toDomainModel()
+    override suspend fun fetchAllExpensesRecords(): Expenses? {
+        val result = expensesService.findAll().firstOrNull()
+        return result?.toExpensesDomainModel()
     }
 
     override suspend fun fetchExpensesRecordsByMonthDate(date: String): Expenses? {

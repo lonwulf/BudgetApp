@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BadgedBox
@@ -36,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -53,7 +53,11 @@ import com.lonwulf.budgetapp.ui.screens.NotificationScreenComposable
 import com.lonwulf.budgetapp.ui.screens.ReportScreenComposable
 import com.lonwulf.budgetapp.ui.screens.SuccessScreenComposable
 import com.lonwulf.budgetapp.ui.theme.BudgetAppTheme
+import com.lonwulf.budgetapp.ui.theme.darkGreen
+import com.lonwulf.budgetapp.ui.theme.gray
 import com.lonwulf.budgetapp.ui.theme.lightGreen
+import com.lonwulf.budgetapp.ui.theme.textGray
+import com.lonwulf.budgetapp.ui.theme.whiteBg
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -119,10 +123,9 @@ class MainActivity : ComponentActivity() {
         )
         Box {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = lightGreen,
                 tonalElevation = 5.dp
-//                modifier = Modifier.height(72.dp)
             ) {
                 screens.forEachIndexed { index, screen ->
                     if (index == 2) {
@@ -153,13 +156,13 @@ class MainActivity : ComponentActivity() {
                 )
             },
             colors = NavigationBarItemColors(
-                selectedIconColor = Color.White,
-                selectedTextColor = Color.White,
-                unselectedIconColor = Color.Gray,
-                unselectedTextColor = Color.Gray,
-                selectedIndicatorColor = MaterialTheme.colorScheme.background,
-                disabledIconColor = Color.Gray,
-                disabledTextColor = Color.Gray
+                selectedIconColor = lightGreen,
+                selectedTextColor = lightGreen,
+                unselectedIconColor = textGray,
+                unselectedTextColor = textGray,
+                selectedIndicatorColor = darkGreen,
+                disabledIconColor = gray,
+                disabledTextColor = gray
             ),
             selected = currentDestination?.route == screen.route,
             onClick = {
@@ -187,6 +190,7 @@ class MainActivity : ComponentActivity() {
             contentAlignment = Alignment.TopCenter
         ) {
             FloatingActionButton(
+                shape = CircleShape,
                 onClick = {
                     navHostController.navigate(TopLevelDestinations.BudgetScreen.route)
                 },
@@ -196,7 +200,7 @@ class MainActivity : ComponentActivity() {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add",
-                    tint = Color.White
+                    tint = whiteBg
                 )
             }
         }
@@ -209,9 +213,7 @@ class MainActivity : ComponentActivity() {
             title = { Text(text = title) }, actions = {},
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
-                scrolledContainerColor = colorResource(
-                    id = R.color.white
-                ),
+                scrolledContainerColor = whiteBg,
                 navigationIconContentColor = MaterialTheme.colorScheme.background,
                 titleContentColor = MaterialTheme.colorScheme.background,
                 actionIconContentColor = colorResource(

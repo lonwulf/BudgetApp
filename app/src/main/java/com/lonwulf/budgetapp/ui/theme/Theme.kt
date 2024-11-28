@@ -14,7 +14,7 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = veryLightGray,
     background = whiteBg,
     onBackground = btnStrokeColor,
-    primaryContainer = btnStrokeColor,
+    primaryContainer = darkBlue,
     onPrimaryContainer = textGray,
 )
 
@@ -26,7 +26,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = veryLightGray,
     background = whiteBg,
     onBackground = btnStrokeColor,
-    primaryContainer = btnStrokeColor,
+    primaryContainer = darkBlue,
     onPrimaryContainer = textGray,
 
 
